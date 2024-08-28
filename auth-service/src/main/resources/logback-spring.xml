@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd'T'HH:mm:ss'Z'} %p %m%n"/>
+    <property name="FILE_PATH"
+              value="/opt/idhs/log/auth-user/"/>
+
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="console">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="full-scope">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}logFile-info.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-info.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="debug">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}logFile-debug.log</file>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-debug.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="warn">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}logFile-warn.log</file>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-warn.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="error">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}logFile-error.log</file>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-error.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="spring-boot-kernel">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}spring-boot-kernel.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-spring-boot-kernel.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="keycloak-kernel">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+        <file>${FILE_PATH}keycloak-kernel.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${FILE_PATH}logFile.%d{yyyy-MM-dd}_%i-keycloak-kernel.log
+            </fileNamePattern>
+            <maxFileSize>5MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <logger level="INFO" name="org.springframework">
+        <appender-ref ref="spring-boot-kernel"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger level="INFO" name="org.keycloak">
+        <appender-ref ref="keycloak-kernel"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+
+    <root level="INFO">
+        <appender-ref ref="console"/>
+        <appender-ref ref="full-scope"/>
+        <appender-ref ref="error"/>
+    </root>
+</configuration>
