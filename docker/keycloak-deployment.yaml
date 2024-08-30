@@ -1,3 +1,29 @@
+# Persistent Volume
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: keycloak-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /mnt/data/keycloak # Đường dẫn này trên host máy ảo Docker
+---
+# Persistent Volume Claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: keycloak-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,8 +35,8 @@ spec:
   selector:
     app: keycloak
   type: NodePort
-
 ---
+# StatefulSet
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -37,6 +63,9 @@ spec:
           ports:
             - containerPort: 8080
           args: ["start-dev"]
+          volumeMounts:
+            - name: keycloak-storage
+              mountPath: /opt/keycloak/data # Đường dẫn Keycloak lưu trữ dữ liệu
   volumeClaimTemplates:
     - metadata:
         name: keycloak-storage

@@ -1,0 +1,11 @@
+# Use a base image with kubectl installed
+FROM bitnami/kubectl:latest
+
+# Copy the script into the container
+COPY restart-pods.sh /usr/local/bin/restart-pods.sh
+
+# Make the script executable
+RUN chmod +x /usr/local/bin/restart-pods.sh
+
+# Set the entrypoint to the script
+ENTRYPOINT ["/usr/local/bin/restart-pods.sh"]

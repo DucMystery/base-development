@@ -140,24 +140,31 @@ public class KeycloakAdminService {
 
     public void initClientRole() {
         ClientsResource clientsResource = this.getRealmResource().clients();
-        List<ClientRepresentation> clientRepresentations = this.getRealmResource().clients()
+        List<ClientRepresentation> clientRepresentations = clientsResource
                 .findByClientId(keycloakClientId);
+        if (clientRepresentations != null){
+            String clientId = clientRepresentations.get(0).getId();
+            RolesResource rolesResource = this.getRealmResource().clients().get(clientId).roles();
+            if (rolesResource == null || rolesResource.list().isEmpty() || rolesResource.list().size() == 1){
+                RoleRepresentation roleRepresentation = new RoleRepresentation();
+                roleRepresentation.setName("PERMISSION_EXPORT");
+                Map<String, List<String>> attributes = new HashMap<>();
+                attributes.put("value_vi", Collections.singletonList("Xuất file"));
+                attributes.put("tree_en", Collections.singletonList("ADMINISTRATION*Company administration*List companies"));
+                attributes.put("value_en", Collections.singletonList("Export"));
+                attributes.put("level", Collections.singletonList("3"));
+                attributes.put("name_vi", Collections.singletonList("Danh sách công ty"));
+                attributes.put("tree_vi", Collections.singletonList("QUẢN TRỊ*Quản trị công ty*Danh sách công ty"));
 
-        if (clientRepresentations == null || clientRepresentations.isEmpty()) {
-            ClientRepresentation clientRepresentation = new ClientRepresentation();
-            clientRepresentation.setName("PERMISSION_EXPORT");
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put("value_vi", "Xuất file");
-            attributes.put("tree_en", "ADMINISTRATION*Company administration*List companies");
-            attributes.put("value_en", "Export");
-            attributes.put("level", "3");
-            attributes.put("name_vi", "Danh sách công ty");
-            attributes.put("tree_vi", "QUẢN TRỊ*Quản trị công ty*Danh sách công ty");
-            clientRepresentation.setAttributes(attributes);
-
-            clientRepresentation.setClientId(BaseUtil.generateRandomCode());
-            clientsResource.create(clientRepresentation);
+                roleRepresentation.setAttributes(attributes);
+                rolesResource.create(roleRepresentation);
+            }
         }
+    }
+
+    public List<UserRepresentation> getAllUsers(){
+
+        return this.getRealmResource().users().list();
     }
 
     public RealmResource getRealmResource(){
